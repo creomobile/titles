@@ -139,25 +139,23 @@ extension WidgetExtension on Widget {
             return InputDecorator(decoration: decoration, child: this);
           default:
             final titleWidget = parameters.builder(context, parameters, title);
-            // ignore: missing_enum_constant_in_switch
-            switch (placement) {
-              case TitlePlacement.left:
+            if (placement == TitlePlacement.top) {
+              return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [titleWidget, this]);
+            } else {
+              return LayoutBuilder(builder: (context, constraints) {
+                final child = constraints.maxWidth == double.infinity
+                    ? this
+                    : Expanded(child: this);
                 return Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [titleWidget, Expanded(child: this)]);
-              case TitlePlacement.right:
-                return Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [Expanded(child: this), titleWidget]);
-              case TitlePlacement.top:
-                return IntrinsicWidth(
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [titleWidget, this]),
-                );
+                    children: placement == TitlePlacement.left
+                        ? [titleWidget, child]
+                        : [child, titleWidget]);
+              });
             }
         }
-        //
       });
 }

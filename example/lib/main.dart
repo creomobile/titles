@@ -65,11 +65,13 @@ class _TitlesExamplePageState extends State<TitlesExamplePage> {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: Text(faker.person.firstName())
+                                        child: Text(faker.person.firstName(),
+                                                overflow: TextOverflow.ellipsis)
                                             .buildTitled('First Name'),
                                       ),
                                       Expanded(
-                                        child: Text(faker.person.lastName())
+                                        child: Text(faker.person.lastName(),
+                                                overflow: TextOverflow.ellipsis)
                                             .buildTitled('Last Name'),
                                       ),
                                     ],
@@ -77,13 +79,15 @@ class _TitlesExamplePageState extends State<TitlesExamplePage> {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: Text(faker.job.title())
+                                        child: Text(faker.job.title(),
+                                                overflow: TextOverflow.ellipsis)
                                             .buildTitled('Title'),
                                       ),
                                       Expanded(
-                                        child:
-                                            Text(faker.internet.ipv4Address())
-                                                .buildTitled('IP'),
+                                        child: Text(
+                                                faker.internet.ipv4Address(),
+                                                overflow: TextOverflow.ellipsis)
+                                            .buildTitled('IP'),
                                       ),
                                     ],
                                   ),

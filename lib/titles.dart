@@ -120,10 +120,11 @@ class TitlesContextData extends InheritedWidget {
 // * widgets
 
 extension WidgetExtension on Widget {
-  // ignore: missing_return
-  Widget buildTitled(dynamic title) => Builder(builder: (context) {
+  Widget buildTitled(dynamic title, [TitlePlacement placement]) =>
+      // ignore: missing_return
+      Builder(builder: (context) {
         final parameters = TitlesContext.of(context).parameters;
-        final placement = parameters.placement;
+        placement ??= parameters.placement;
         switch (placement) {
           case TitlePlacement.none:
           case TitlePlacement.placeholder:
@@ -135,9 +136,7 @@ extension WidgetExtension on Widget {
               contentPadding: const EdgeInsets.only(top: 20),
               border: OutlineInputBorder(borderSide: BorderSide.none),
             ).applyDefaults(theme.inputDecorationTheme);
-            return InputDecorator(
-                decoration: decoration,
-                child: this);
+            return InputDecorator(decoration: decoration, child: this);
           default:
             final titleWidget = parameters.builder(context, parameters, title);
             // ignore: missing_enum_constant_in_switch

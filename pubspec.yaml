@@ -1,6 +1,6 @@
 name: titles
 description: High customizable title decorators for widgets and editors with common context data.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/creomobile/titles
 
 environment:

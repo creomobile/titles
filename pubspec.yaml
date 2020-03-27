@@ -1,10 +1,10 @@
 name: titles
-description: High customizable title decorators for widgets and editors, table generation for titles sets.
-version: 0.0.1
+description: High customizable title decorators for widgets and editors with common context data.
+version: 0.0.2
 homepage: https://github.com/creomobile/titles
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:

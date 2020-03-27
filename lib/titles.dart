@@ -44,10 +44,12 @@ class TitleParameters {
       titleWidget = title;
     } else {
       final placement = parameters.placement;
-      assert(placement != TitlePlacement.label &&
+      assert(placement != TitlePlacement.none &&
+          placement != TitlePlacement.label &&
           placement != TitlePlacement.placeholder);
       final text = Text(
-          title.toString() + (placement == TitlePlacement.left ? ':' : ''));
+          title.toString() + (placement == TitlePlacement.left ? ':' : ''),
+          overflow: TextOverflow.ellipsis);
       // ignore: missing_enum_constant_in_switch
       switch (placement) {
         case TitlePlacement.left:
@@ -117,27 +119,46 @@ class TitlesContextData extends InheritedWidget {
 
 // * widgets
 
-
-abstract class Titled {
-  Widget buildTitle(BuildContext context);
-  Widget buildItem(BuildContext context);
-  Widget build();
-}
-
-abstract class Titleds {
-  List<Titled> get list;
-  Widget buildCard();
-  Widget buildRow(List<Widget> items);
-}
-
-typedef Widget RowBuilder(List<Widget> items);
-typedef Widget CardBuilder<T extends Titleds>(T data);
-
-abstract class TitledData<T extends Titleds> {
-  List<WidgetBuilder> titleBuilders;
-  List<WidgetBuilder> itemBuilders;
-  RowBuilder rowBuilder;
-  CardBuilder cardBuilder;
-  Widget buildTable();
-  Widget buildCards();
+extension WidgetExtension on Widget {
+  // ignore: missing_return
+  Widget buildTitled(dynamic title) => Builder(builder: (context) {
+        final parameters = TitlesContext.of(context).parameters;
+        final placement = parameters.placement;
+        switch (placement) {
+          case TitlePlacement.none:
+          case TitlePlacement.placeholder:
+            return this;
+          case TitlePlacement.label:
+            final theme = Theme.of(context);
+            final decoration = InputDecoration(
+              labelText: title.toString(),
+              contentPadding: const EdgeInsets.only(top: 20),
+              border: OutlineInputBorder(borderSide: BorderSide.none),
+            ).applyDefaults(theme.inputDecorationTheme);
+            return InputDecorator(
+                decoration: decoration,
+                child: this);
+          default:
+            final titleWidget = parameters.builder(context, parameters, title);
+            // ignore: missing_enum_constant_in_switch
+            switch (placement) {
+              case TitlePlacement.left:
+                return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [titleWidget, Expanded(child: this)]);
+              case TitlePlacement.right:
+                return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [Expanded(child: this), titleWidget]);
+              case TitlePlacement.top:
+                return IntrinsicWidth(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [titleWidget, this]),
+                );
+            }
+        }
+        //
+      });
 }
